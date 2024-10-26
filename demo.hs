@@ -1,6 +1,5 @@
-import Graphics.Win32 (eS_AUTOHSCROLL, INT)
 import Distribution.Simple.Program.HcPkg (list)
-import System.Win32 (xBUTTON1)
+import Distribution.Simple.InstallDirs (InstallDirTemplates)
 -- types :type (Bool - char - string - int - integer - float - double )
 -- operators - + * / ^ = == < > && || not . ? \ : # $ % !! 
 -- function (sum - fact - toupper)
@@ -26,7 +25,7 @@ import System.Win32 (xBUTTON1)
 sig :: Int -> String
 sig n = if n>0 then "+" else "-"
 
---TODO: type signature before every-function
+-- TODO: type signature before every-function
 equal :: Int -> Int -> Int -> Int
 equal x y z = if (x > y && x > z) then x
                else
@@ -100,7 +99,7 @@ nlist = [0,5 .. 50]
 --todo concatenation with list
 list3 = list1++list2
 -- 5:[2, 3] ==> 
--- todo length 
+-- todo length
 -- print (length list3)
 -- todo show 
 -- todo read "5"  +2 ==> 7
@@ -115,13 +114,11 @@ list3 = list1++list2
 
 -- ? length with recursive : 
 -- taille :: [Int] -> Int
--- taille (_ : xs) = 1 + taille xs -- Recursively counts the elements in the list
--- taille [] = 0 -- Base case: the length of an empty list is 0
+-- taille (_ : xs) = 1 + taille xs -- ! Recursively counts the elements in the list
+-- taille [] = 0 -- ! Base case: the length of an empty list is 0
 
 -- ? whithout first element 
 
-my_list::[Int] -- ! declaration of the list
-my_list = [0,5 .. 20]
 
 -- ! get all list without head
 -- taille::[Int] -> [Int]
@@ -146,17 +143,96 @@ sumlist(x:xl) = x + sumlist xl
 
 
 -- ! length of list 
-takex:: [Int] -> Int
-takex [] = 0
-takex(x:xl) = 1 + takex xl
+length_list:: [Int] -> Int
+length_list [] = 0
+length_list (x : xl) = 1 + length_list xl
+
+
+-- ! take a part of a list
+takex::Int -> [Int] -> [Int]
+takex 0 _ = []
+takex n (x:xl) = x : takex (n-1) xl
 
 
 
+
+-- ! factorial
+fact::Int -> Int
+fact 0 = 1
+fact x = x * fact(x - 1)
+
+-- ! sum of factorial of all elements in a list
+sum_list_facto::[Int] -> Int
+sum_list_facto [] = 0
+sum_list_facto (x:xl) = fact x + sum_list_facto xl
+
+
+-- ! max in a list 
+
+maxList :: [Int] -> Int
+maxList [] = 0
+maxList [x] = x
+maxList (x:y:xl)
+      |x>y = maxList (x:xl)
+      |otherwise = maxList (y:xl)
+
+
+-- ! Local definitions : where
+
+functionSum::Int->Int->Int
+functionSum x y = f1 + f2
+      where f1 = x + y
+            f2 = x * y
+-- ! diff btw where and let : u can use where with Guards ( | | | .. )
+
+-- ! m2 : let
+functionSum2::Int-> Int -> Int
+functionSum2 x y = let
+      f1 = x + y
+      f2 = x * y
+      in f1 + f2
+
+-- ! some help comand in ghci (interactive cmd line ) ->  :r , :load demo.hs ,:edit demo.hs ,:type True, :?
+
+
+-- ! List Comprehensions
+
+evenNumbers::[Int]->[Int]
+evenNumbers xl = [ x | x<-xl , mod x 2 == 0 ]
+-- * x<-xl : this part iterates over each element "x" in the list xl
+-- * take x from xl list , then check the condition of modulos, if true : take it to the list else not throw it
+
+addPairs::[(Int,Int)]->[Int]
+addPairs xl = [ x+y | (x,y)<- xl ]
+
+sumZeroList::[Int] -> Int
+sumZeroList xl = length ([ x | x <- xl, x == 0])
+
+-- ! concatenation of list of lists (like a matrix)
+con :: [[Int]]-> [Int]
+con xxl = [ x | xl <- xxl, x<- xl ]
+
+sumFactorial::[Int] -> Int
+sumFactorial xl = sum ([ fact x| x  <-xl])
+
+-- ! QUICK SORT IMPLEMENTATION
+
+quickSort::[Int]-> [Int]
+quickSort [x] = [x]
+quickSort [] = []
+quickSort (x:xl)  = quickSort([ n | n <- xl, n <= x ]) ++ [x] ++ quickSort ([ n | n <- xl, n > x ])
+
+
+forTry::[Int] -> [Int]
+forTry (x:xl) = [1,2] ++ [x] ++ [4,5]
+
+
+
+my_list::[Int] -- ! declaration of the list for testing in the main
+my_list = [0,5 .. 20]
 
 main :: IO ()
 main = do
       print my_list
-      print (takex my_list )
-
-
+      print (functionSum2 2 3)
 
