@@ -1,5 +1,5 @@
-import Distribution.Simple.Program.HcPkg (list)
-import Distribution.Simple.InstallDirs (InstallDirTemplates)
+import Data.Char
+import Graphics.Win32 (INT)
 -- types :type (Bool - char - string - int - integer - float - double )
 -- operators - + * / ^ = == < > && || not . ? \ : # $ % !! 
 -- function (sum - fact - toupper)
@@ -40,7 +40,7 @@ equalGuards x y z
    |y>z = y
    |otherwise = z
 
---todo switch case :
+-- todo switch case :
 findNumberSwitch :: Int -> String
 findNumberSwitch n =
    case n of
@@ -195,6 +195,10 @@ functionSum2 x y = let
 -- ! some help comand in ghci (interactive cmd line ) ->  :r , :load demo.hs ,:edit demo.hs ,:type True, :?
 
 
+my_list :: [Int] -- ! declaration of the list for testing in the main
+my_list = [0, 5 .. 20]
+
+
 -- ! List Comprehensions
 
 evenNumbers::[Int]->[Int]
@@ -228,11 +232,63 @@ forTry (x:xl) = [1,2] ++ [x] ++ [4,5]
 
 
 
-my_list::[Int] -- ! declaration of the list for testing in the main
-my_list = [0,5 .. 20]
+upp::Char->Char
+-- ! ord 'A' - ord 'a' = 32 --->  output for 'A' -> 65
+upp ch = chr (ord ch - 32)
+
+strupp :: String -> String
+strupp ch = [ upp x | x<-ch]
+
+------------- ! HIGH ORDERED FUNCTIONS
+-- ? func parameter is a function
+-- ? a func return a function as a parameter
+
+testHOF :: Int-> (Int->Int) -> Int
+testHOF element funn = funn element
+-- * example : testHOF 10 (+1)  :output : 11
+
+sumfactoV2 :: (Int->Int) -> [Int] -> Int
+sumfactoV2 _ [] = 0
+-- * with "_" ,we're telling Haskell that we don’t need to refer to this function in the base case.
+sumfactoV2 fact (n:nl) = fact n + sumfactoV2 fact nl
+
+-- let facty n = product [1..n]
+
+-- ! higher ordered functions example : map, zip , ZipWith, Foldr,Filter,All, Any, TakeWhile, DropWhile
+
+
+-- let sq n = n^2
+-- map sq [1, 2, 3]
+-- output : [1,4,9]
+
+-- TODO: MAP FUNCTION
+mab2 :: (Int->Int) -> [Int] -> [Int]
+mab2 f xs = [ f x | x <- xs ]
+
+-- TODO: ZIP FUNCTION
+zipMan :: [Int]->[Char] -> [(Int,Char)]
+-- zipMan (xi:xl) (xj:xt) = [ (xi,xj) | xi <- xl , xj <- xt] : escape first element
+zipMan [] [] = []
+zipMan [] _ = []
+zipMan _ [] = []
+zipMan xl xt = [ (xi,xj) | xi <- xl , xj <- xt]
+
+-- ! recursive way :
+zipManRec :: [Int] -> [Char] -> [(Int,Char)]
+zipManRec [] [] = []
+zipManRec [] _ = []
+zipManRec _ [] = []
+zipManRec (x:xl) (y:yl) = (x,y) : zipManRec xl yl
+
+-- ! example zip : [ return the index of an element in a list ]
+
+posFunction :: Int -> [Int] -> [Int]
+posFunction n [] = []
+-- posFunction n ll = [  | x <- ll , x == n ]
+
+
+
 
 main :: IO ()
 main = do
-      print my_list
-      print (functionSum2 2 3)
-
+      print "you can use GHCI terminal to test functions"
