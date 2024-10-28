@@ -1,13 +1,12 @@
 import Data.Char
 import Graphics.Win32 (INT)
+import Control.Concurrent.STM (check)
 -- types :type (Bool - char - string - int - integer - float - double )
 -- operators - + * / ^ = == < > && || not . ? \ : # $ % !! 
 -- function (sum - fact - toupper)
 
 
 -- function1 x y = x+y
-
-
 
 
 -- fact :: Int -> Int
@@ -130,7 +129,7 @@ last_element::[Int] -> Int
 last_element [x] = x
 last_element (x:xl) = last_element xl
 
--- ! reverse a list 
+-- ! reverse a list
 reverse_list:: [Int]-> [Int]
 reverse_list[] = []
 reverse_list(x:xl) = reverse_list xl ++ [x]
@@ -142,7 +141,7 @@ sumlist [] = 0
 sumlist(x:xl) = x + sumlist xl
 
 
--- ! length of list 
+-- ! length of list
 length_list:: [Int] -> Int
 length_list [] = 0
 length_list (x : xl) = 1 + length_list xl
@@ -280,15 +279,56 @@ zipManRec [] _ = []
 zipManRec _ [] = []
 zipManRec (x:xl) (y:yl) = (x,y) : zipManRec xl yl
 
--- ! example zip : [ return the index of an element in a list ]
-
+-- ! example zip : [ return the indexes of an element in a list ]
 posFunction :: Int -> [Int] -> [Int]
 posFunction n [] = []
--- posFunction n ll = [  | x <- ll , x == n ]
+posFunction n ll = [ i | (element,i) <-zip ll [0..m], element == n ]
+                        where m = ((length ll) -1)
 
 
 
+-- TODO: [1,2,3,4,5] zipped with [2,3,4,5] --> (1>2),(2>3),(3>4),(4>5)
+checkSorted :: [Int] -> Bool
+checkSorted [] = True
+checkSorted [x] = True
+checkSorted l = and [ first<= last | (first, last) <- zip l (tail l) ]
+-- TODO: (and) functions is a function that take a list as a param and check with "and" operator between elements
+
+
+-- ! Lambda expression
+multi :: [Int] -> [Int]
+multi l = map (\n-> n*2) l
+
+
+-- TODO: [(1,2),(3,4),(5,6)] --> [3,7,11]
+sumTuple :: [(Int,Int)] -> [Int]
+sumTuple l = map (\(x,y)-> x+y ) l
+
+
+
+
+
+-- TODO: SOME EXERCICES :
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+testing :: [Int] -> String
+testing l = unlines [ "Element :" ++ show element ++ ", at index :"++ show indice | (element, indice )<- zip l [0..(length l -1)]]
 
 main :: IO ()
 main = do
       print "you can use GHCI terminal to test functions"
+
+
