@@ -175,6 +175,13 @@ maxList (x:y:xl)
       |x>y = maxList (x:xl)
       |otherwise = maxList (y:xl)
 
+-- maxList :: [Int] -> Int
+-- maxList [] = error "La liste est vide."
+-- Renvoie une erreur si la liste est vide
+-- maxList [x] = x
+-- Si la liste contient un seul élément, c'est le maximum
+-- maxList (x : xs) = max x (maxList xs)
+-- Compare le premier élément avec le maximum des autres éléments
 
 -- ! Local definitions : where
 
@@ -311,24 +318,34 @@ sumTuple l = map (\(x,y)-> x+y ) l
 -- TODO: SOME EXERCICES :
 
 
+numbers :: [Int]
+numbers = [1, 2, 3, 4, 5]
+-- ou : numbers = [1 .. 5]
+
+doubledNumbers :: [Int]
+doubledNumbers = map (*2) numbers
+
+sumOfNumbers :: Int
+sumOfNumbers = sum numbers
+
+-- list infini
+nbrNatural :: [Int]
+nbrNatural = [1..]
+--ghci> take 5 nbrNatural
+--    -> OUTPUT :
 
 
 
 
+data Personne = Personne { nom :: String, age :: Int, ville :: String }
 
-
-
-
-
-
-
-
-
-testing :: [Int] -> String
-testing l = unlines [ "Element :" ++ show element ++ ", at index :"++ show indice | (element, indice )<- zip l [0..(length l -1)]]
+personne1 :: Personne
+personne1 = Personne { nom = "rayane", age = 30, ville = "Jijel" }
 
 main :: IO ()
 main = do
-      print "you can use GHCI terminal to test functions"
-
-
+      let personne2 = Personne {nom = "Yahia", age = 21, ville = "Jijel"}
+      print ("nom : " ++ nom personne1 ++ ", age :" ++ show (age personne1) ++ ", ville : " ++ ville personne1)
+      -- OUTPUT : "nom : rayane, age :30, ville : Paris"
+      print (nom personne2)
+      -- OUTPUT : "Yahia"
